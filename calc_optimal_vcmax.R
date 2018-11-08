@@ -45,7 +45,8 @@ calc_optimal_vcmax = function(tg_c = 25, z = 0, vpdo = 1, cao= 400, paro = 800, 
 	
 	# constants
 	R = 8.314
-	
+	c = 0.05336251
+
 	# temperature conversion
 	tg_K = tg_c + 273.15
 	
@@ -59,9 +60,8 @@ calc_optimal_vcmax = function(tg_c = 25, z = 0, vpdo = 1, cao= 400, paro = 800, 
 	vpd = calc_vpd(tg_c, z, vpdo)
 	par = calc_par(paro, z)
 	ci = chi * ca # Pa
-	m = ((ci - gammastar)/(ci + (2 * gammastar))) #Aj CO2 limitation
-	mc = ((ci - gammastar) / (ci + km)) #Av CO2 limitation
-	c = calc_c(temp = 25, z = 0, vpdo = 1, cao = 360, jv25 = 2.07, theta)
+	m = ((ci - gammastar)/(ci + (2 * gammastar))) 
+	mc = ((ci - gammastar) / (ci + km)) 
 	omega = calc_omega(theta = theta, c = c, m = m)
 	omega_star = (1 + (omega) - sqrt((1 + (omega))^2 - (4 * theta * omega))) 
 	
@@ -72,9 +72,9 @@ calc_optimal_vcmax = function(tg_c = 25, z = 0, vpdo = 1, cao= 400, paro = 800, 
 	jmax_prime = jvrat * vcmax_prime
 		
 	# output
-	results = as.data.frame(cbind(tg_c, z, vpdo, cao, paro, q0, theta, par, patm, ca, vpd, chi, ci, km, gammastar, omega, c, m, mc, omega_star, vcmax_prime, jvrat, jmax_prime))
+	results = as.data.frame(cbind(tg_c, z, vpdo, cao, paro, q0, theta, par, patm, ca, vpd, chi, ci, km, gammastar, omega, m, mc, omega_star, vcmax_prime, jvrat, jmax_prime))
 	
-	colnames(results) = c('tg_c', 'z', 'vpdo', 'cao', 'paro', 'q0', 'theta', 'par', 'patm', 'ca', 'vpd', 'chi', 'ci', 'km', 'gammastar', 'omega', 'c', 'm', 'mc', 'omega_star', 'vcmax_prime', 'jvrat', 'jmax_prime')
+	colnames(results) = c('tg_c', 'z', 'vpdo', 'cao', 'paro', 'q0', 'theta', 'par', 'patm', 'ca', 'vpd', 'chi', 'ci', 'km', 'gammastar', 'omega', 'm', 'mc', 'omega_star', 'vcmax_prime', 'jvrat', 'jmax_prime')
 	
 	results	
 	
