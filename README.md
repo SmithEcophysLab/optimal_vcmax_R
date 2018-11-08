@@ -2,7 +2,8 @@
 This repository contains the R functions necessary for calculating optimal vcmax in R as 
 in Smith et al. Photosynthetic capacity is optimized to the environment. Ecology Letters.
 
-The script "calc_optimal_vcmax.R" contains code for the optimal vcmax function.'
+The script [calc_optimal_vcmax.R](calc_optimal_vcmax.R) contains code for the optimal 
+vcmax function.'
 The function will calculate optimal vcmax, optimal jmax, and the optimal jmax/vcmax ratio.
 The inputs required are temperature, PAR, VPD, elevation, and an estimate for the
 quantum efficiency of photosynthetic electron transport, and the curvature of the light
