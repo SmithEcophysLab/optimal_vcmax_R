@@ -1,6 +1,6 @@
-# calculate the temperature response multiplier for Vcmax (Kattge and Knorr 2007)
+# calculate the temperature response multiplier for Vcmax and Jmax (Kattge and Knorr 2007)
 
-calc_vcmax_tresp_mult = function(tleaf, tmean, tref){
+calc_tresp_mult = function(tleaf, tmean, tref){
 	
 	temp = tleaf + 273.15
 	Ha= 71513
