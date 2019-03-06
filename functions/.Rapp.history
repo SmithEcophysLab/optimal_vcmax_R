@@ -1,0 +1,41 @@
+trefK = 298#
+Hd= 200000#
+adelS= 668.39#
+bdelS= -1.07#
+tmean = 25#
+R = 8.314
+kend = ((1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R)))/(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R))))
+temp = 298
+kend = ((1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R)))/(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R))))
+kend2 = ((1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R))))/(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R)))
+kend
+kend2
+tmean = c(5,25,5)
+kend = ((1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R)))/(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R))))
+kend2 = ((1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R))))/(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R)))
+kend
+kend2
+tmean = seq(5,25,5)
+kend = ((1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R)))/(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R))))
+kend2 = ((1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R))))/(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R)))
+kend2
+kend
+tmean
+trefK = 298#
+Hd= 200000#
+adelS= 668.39#
+bdelS= -1.07#
+tmean = seq(5,25,5)#
+R = 8.314#
+temp = seq(5,25,5)#
+#
+kend = ((1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R)))/(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R))))#
+kend2 = ((1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R))))/(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R)))
+kend
+kend2
+(1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R)))
+(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R)))
+(1+exp((temp*(adelS+bdelS*tmean)-Hd)/(temp*R))
+)
+((1+exp((trefK*(adelS+bdelS*tmean)-Hd)/(trefK*R))))
+0.25/(8*0.85)

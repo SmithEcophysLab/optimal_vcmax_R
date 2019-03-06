@@ -42,7 +42,7 @@ library(R.utils)
 # load necessary functions
 sourceDirectory('functions')
 
-calc_optimal_vcmax <- function(tg_c <- 25, z <- 0, vpdo <- 1, cao<- 400, paro <- 800, q0 <- 0.257, theta <- 0.85){
+calc_optimal_vcmax <- function(tg_c = 25, z = 0, vpdo = 1, cao = 400, paro = 800, q0 = 0.257, theta = 0.85){
 	
 	# constants
 	R <- 8.314

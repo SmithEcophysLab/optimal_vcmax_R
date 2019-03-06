@@ -437,3 +437,6 @@ t_seq
 vpd_seq
 z_seq
 ca_seq
+source('calc_optimal_vcmax.R')
+par_seq = calc_optimal_vcmax(paro = seq(100, 1000, 100))
+par_seq
