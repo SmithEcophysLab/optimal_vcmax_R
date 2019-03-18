@@ -72,16 +72,24 @@ calc_optimal_vcmax <- function(tg_c = 25, z = 0, vpdo = 1, cao = 400, paro = 800
 	vcmax_star <- ((q0 * par * m) / mc) * (omega_star / (8 * theta))	          # Eq. 19
 	vcmax_prime <- vcmax_star * calc_tresp_mult(tg_c, tg_c, tref <- to)         # Eq. 20
 	jvrat <- ((8 * theta * mc * omega) / (m * omega_star))     # Eq. 15 / Eq. 19
-	jmax_prime <- jvrat * vcmax_prime 
+	jmax_prime <- jvrat * vcmax_prime
+	
+	vcmax_25 = vcmax_star / calc_tresp_mult(tleaf = to, tmean = tg_c, tref = 25)
+	vcmax_prime_25 = vcmax_prime / calc_tresp_mult(tleaf = tg_c, tg_c, tref = 25)
+	vcmax_25_alt = vcmax_star / calc_tresp_mult(tleaf = tg_c, tmean = tg_c, tref = 25)
 	
 	# equivalently
 	# jmax_prime <- q0 * par * omega * calc_tresp_mult(tg_c, tg_c, tref <- to)    # Eq. 15 * Eq. 20
 	# jvrat <- jmax_prime/vcmax_prime
 	
 	# output
-	results <- as.data.frame(cbind(tg_c, z, vpdo, cao, paro, q0, theta, par, patm, ca, vpd, chi, ci, km, gammastar, omega, m, mc, omega_star, vcmax_prime, jvrat, jmax_prime))
+	results <- as.data.frame(cbind(tg_c, z, vpdo, cao, paro, q0, theta, par, patm, ca, vpd, chi, ci, km, 
+	                               gammastar, omega, m, mc, omega_star, vcmax_prime, jvrat, jmax_prime, 
+	                               vcmax_star, vcmax_25, vcmax_prime_25, vcmax_25_alt))
 	
-	colnames(results) <- c('tg_c', 'z', 'vpdo', 'cao', 'paro', 'q0', 'theta', 'par', 'patm', 'ca', 'vpd', 'chi', 'ci', 'km', 'gammastar', 'omega', 'm', 'mc', 'omega_star', 'vcmax_prime', 'jvrat', 'jmax_prime')
+	colnames(results) <- c('tg_c', 'z', 'vpdo', 'cao', 'paro', 'q0', 'theta', 'par', 'patm', 'ca', 'vpd', 'chi', 'ci', 'km', 
+	                       'gammastar', 'omega', 'm', 'mc', 'omega_star', 'vcmax_prime', 'jvrat', 'jmax_prime', 
+	                       'vcmax_star', 'vcmax_25', 'vcmax_prime_25', 'vcmax_25_alt')
 	
 	results	
 	
