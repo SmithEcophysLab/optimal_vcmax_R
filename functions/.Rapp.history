@@ -163,3 +163,4 @@ calc_chi = function(temp, z, vpdo, cao){ # temp in °C, z in m, vpd in kPa, ca i
 	chi	#
 }
 calc_chi(temp = 25, z = 0, vpdo =1, cao=400)
+source('calc_optimal_vcmax.R')
