@@ -17,8 +17,6 @@ calc_gammastar_pa = function(temp, z) {
 	
 	gStar_pa = gammastar25*exp((Hgm/R)*(1/298.15-1/temp_k))
 	
-	#gStar_ppm * 1e-6 * patm #convert to Pa
-	
-	gStar_pa * (O2_z / O2_0) # vary based on oxygen due to Rubisco specificity factor
+	gStar_pa
 	
 }
