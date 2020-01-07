@@ -8,7 +8,7 @@
 # tg_c: acclimated temperature (degC)
 # z: elevation (m)
 # vpdo: vapor pressure deficit at sea level (kPa)
-# cao: atmospheric CO2 at sea level (Pa)
+# cao: atmospheric CO2 at sea level (umol mol-1)
 # paro: photosynthetically active radiation at sea level (µmol m-2 s-1)
 # q0: quantum efficiency of photosynthetic electron transport (mol/mol)
 # theta: curvature of the light response of electron transport (unitless)
