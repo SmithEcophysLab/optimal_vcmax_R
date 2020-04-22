@@ -14,3 +14,5 @@ It is suggested that users run this script first to ensure the function will run
 
 Any questions or issues can be submitted via GitHub or directed to Nick Smith
 (nick.smith@ttu.edu).
+
+[![DOI](https://zenodo.org/badge/156727566.svg)](https://zenodo.org/badge/latestdoi/156727566)
