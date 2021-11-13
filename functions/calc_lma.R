@@ -1,3 +1,5 @@
+# original paper: https://www.biorxiv.org/content/10.1101/2021.02.07.430028v2
+
 #### 1. define function and parameters in photosynthesis model
 ## functions
 {

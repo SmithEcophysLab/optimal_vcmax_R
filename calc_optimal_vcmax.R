@@ -59,7 +59,8 @@ library(R.utils)
 sourceDirectory('functions', modifiedOnly = FALSE)
 
 calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao = 400, oao = 209460,
-                               paro = 800, q0 = 0.257, theta = 0.85, f = 0.5){
+                               paro = 800, q0 = 0.257, theta = 0.85, chi = "unknown",
+                               lma = "unknown", f = 0.5){
   
   # constants
   R <- 8.314
@@ -81,7 +82,7 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
     # C3
 
     # Coordination and least-cost hypothesis model terms
-    chi <- calc_chi(tg_c, z, vpdo, cao)
+    chi <- ifelse(chi == "unknown", calc_chi(tg_c, z, vpdo, cao), chi)
     ci <- chi * ca # Pa
     mc <- ((ci - gammastar) / (ci + km))
     m <- ((ci - gammastar)/(ci + (2 * gammastar)))
@@ -97,7 +98,7 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
     jvrat <- ((8 * theta * mc * omega) / (m * omega_star))
     jmax <- jvrat * vcmax
 
-    vpmax <- NA
+    vpmax <- 0
     vpmax25 <- 0
     leakage <- NA
     chi_bs <- NA
@@ -107,15 +108,15 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
     cbs <- NA
     chi_bs <- NA
     obs <- NA
-    Al <- NA
-    Ap <- NA
-    Ac <- NA
+    Al <- q0 * par * m * omega_star / (8 * theta)
+    Ap <- 0
+    Ac <- vcmax * mc
     
     }else{
       # C4
       
       # Coordination and least-cost hypothesis model terms
-      chi <- calc_chi_c4(cao, tg_c, vpd, z)
+      chi <- ifelse(chi == "unknown", calc_chi_c4(cao, tg_c, vpd, z), chi)
       ci <- ca * chi
       cm <- ci
       oi <- oa * chi
@@ -158,7 +159,8 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
   jmax25 <- jmax / calc_jmax_tresp_mult(tg_c, tg_c, 25)
   
   # estimate LMA
-  lma <- calc_lma(f = f, par = paro, temperature = tg_c, vpd_kpa = vpdo, z = z, co2 = 400)
+  lma <- ifelse(lma == "unknown", calc_lma(f = f, par = paro, temperature = tg_c, vpd_kpa = vpdo, z = z, co2 = 400), lma)
+  # lma <- calc_lma(f = f, par = paro, temperature = tg_c, vpd_kpa = vpdo, z = z, co2 = 400)
   
   # calculate leaf N in rubisco from predicted vcmax
   nrubisco <- fvcmax25_nrubisco(vcmax25)
@@ -194,7 +196,8 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
 	                      "paro" = paro,
 	                      "q0" = q0,
 	                      "theta" = theta,
-                        "f" = f,
+                        "lma" = lma,
+                        # "f" = f,
                         "patm" = patm,
                         "par" = par,
                         "vpd" = vpd,
@@ -224,7 +227,6 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
                         "jmax25" = jmax25,
                         "vpmax25" = vpmax25,
                         "vcmax25" = vcmax25,
-	                      "lma" = lma,
 	                      "nrubisco" = nrubisco, 
 	                      "nbioe" = nbioe, 
 	                      "npep" = npep, 
