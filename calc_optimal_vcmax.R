@@ -14,12 +14,13 @@
 # paro: photosynthetically active radiation at sea level (µmol m-2 s-1)
 # q0: quantum efficiency of photosynthetic electron transport (mol/mol)
 # theta: curvature of the light response of electron transport (unitless)
+# chi: leaf intercellular to atmospheric CO2 ratio (ci/ca) (unitless)
+# lma: leaf mass area (g m-2)
 # R: universal gas constant (J mol-1 K-1)
 # patm: atmospheric pressure (Pa)
 # ca: atmospheric CO2 at z (Pa)
 # km: Michaelis-Menten constant for Rubisco (Pa)
 # gammastar: CO2 compensation point (Pa)
-# chi: leaf intercellular to atmospheric CO2 ratio (ci/ca) (unitless)
 # vpd: vapor pressure deficit at z (kPa)
 # par: photosynthetically active radiation at z (µmol m-2 s-1)
 # ci: leaf intercellular CO2 concentation (Pa)
@@ -35,7 +36,6 @@
 # vcmax25: optimal maximum rate of Rubisco carboxylation at a temperature of 25 C (µmol m-2 s-1) 
 # vpmax25: ...at a temperature of 25 C (µmol m-2 s-1)
 # jmax25: optimal maximum rate of electron transport at a temperature of 25 C (µmol m-2 s-1)
-# lma: leaf mass area
 # grossphoto: gross photosynthesis
 # resp: respiration
 # netphoto: net photosynthesis
@@ -59,8 +59,7 @@ library(R.utils)
 sourceDirectory('functions', modifiedOnly = FALSE)
 
 calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao = 400, oao = 209460,
-                               paro = 800, q0 = 0.257, theta = 0.85, chi = "unknown",
-                               lma = "unknown", f = 0.5){
+                               paro = 800, q0 = 0.257, theta = 0.85, chi = NA, lma = NA, f = 0.5){
   
   # constants
   R <- 8.314
@@ -82,7 +81,7 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
     # C3
 
     # Coordination and least-cost hypothesis model terms
-    chi <- ifelse(chi == "unknown", calc_chi(tg_c, z, vpdo, cao), chi)
+    chi <- ifelse(is.na(chi), calc_chi(tg_c, z, vpdo, cao), chi)
     ci <- chi * ca # Pa
     mc <- ((ci - gammastar) / (ci + km))
     m <- ((ci - gammastar)/(ci + (2 * gammastar)))
@@ -116,7 +115,7 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
       # C4
       
       # Coordination and least-cost hypothesis model terms
-      chi <- ifelse(chi == "unknown", calc_chi_c4(cao, tg_c, vpd, z), chi)
+      chi <- ifelse(is.na(chi), calc_chi_c4(cao, tg_c, vpd, z), chi)
       ci <- ca * chi
       cm <- ci
       oi <- oa * chi
@@ -159,9 +158,10 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
   jmax25 <- jmax / calc_jmax_tresp_mult(tg_c, tg_c, 25)
   
   # estimate LMA
-  lma <- ifelse(lma == "unknown", calc_lma(f = f, par = paro, temperature = tg_c, vpd_kpa = vpdo, z = z, co2 = 400), lma)
-  # lma <- calc_lma(f = f, par = paro, temperature = tg_c, vpd_kpa = vpdo, z = z, co2 = 400)
-  
+  lma <- ifelse(is.na(lma), 
+                calc_lma(f = f, par = paro, temperature = tg_c, vpd_kpa = vpdo, z = z, co2 = 400), 
+                lma)
+
   # calculate leaf N in rubisco from predicted vcmax
   nrubisco <- fvcmax25_nrubisco(vcmax25)
   
