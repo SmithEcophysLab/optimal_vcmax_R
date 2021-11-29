@@ -19,8 +19,15 @@ calc_chi = function(temp, z, vpdo, cao){ # temp in °C, z in m, vpd in kPa, ca i
 	
 	chi = (gammastar / ca_pa) + (1 - (gammastar / ca_pa)) * (xi / (xi + sqrt(vpd_pa)))
 	
-	chi	
-	
+  chi	
 }
 
+given_chi <- function(chi){
+  ifelse(!is.na(chi), "yes", "no")
+}
 
+return_chi <- function(given_chi, chi, temp, z, vpdo, cao){
+  ifelse(given_chi == "yes",
+         return(chi),
+         return(calc_chi(temp = temp, z = z, vpdo = vpdo, cao = cao)))
+}

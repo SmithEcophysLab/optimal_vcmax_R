@@ -1,4 +1,4 @@
-# original paper: https://www.biorxiv.org/content/10.1101/2021.02.07.430028v2
+# From Wang et al. 2021: https://doi.org/10.1101/2021.02.07.430028 
 
 #### 1. define function and parameters in photosynthesis model
 ## functions
@@ -160,8 +160,15 @@ calc_lma <- function(deciduous = 'yes', # yes or no for deciduous species
   
 }
 
-calc_lma(z = seq(0, 5000, 1000))
-calc_lma(deciduous = 'no', z = seq(0, 5000, 1000))
+return_lma <- function(given_lma, lma, f, par, temperature, vpd_kpa, z, co2){
+  ifelse(given_lma == "yes",
+         return(lma),
+         return(calc_lma(f = f, par = par, temperature = temperature, vpd_kpa = vpd_kpa, z = z, co2 = co2)))
+}
+
+# given_lma <- function(lma){
+#   ifelse(!is.na(lma), "yes", "no")
+# }
 
 ## to do: need par adjustments based on elevation
 ## need to integrate with other code

@@ -23,3 +23,9 @@ calc_chi_c4 <- function(ca, temp, vpd, z){
   
   return(res)
 }
+
+return_chi_c4<- function(given_chi, chi, ca, temp, vpd, z){
+  ifelse(given_chi == "yes",
+         return(chi),
+         return(calc_chi_c4(ca = ca, temp = temp, vpd = vpd, z = z)))
+}

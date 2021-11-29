@@ -12,10 +12,15 @@
 # cao: atmospheric CO2 at sea level (umol mol-1)
 # oao: atmospheric O2 at sea level (ppm)
 # paro: photosynthetically active radiation at sea level (µmol m-2 s-1)
+# q0_resp: yes or no, use the q0 response curve calculation
+# q0_int: intercept for the q0 response curve calculation
 # q0: quantum efficiency of photosynthetic electron transport (mol/mol)
 # theta: curvature of the light response of electron transport (unitless)
+# given_chi: yes or no based on if chi is known (yes) or calculated (no)
 # chi: leaf intercellular to atmospheric CO2 ratio (ci/ca) (unitless)
+# f: fraction of year in growing season
 # lma: leaf mass area (g m-2)
+# given_lma: yes or no based on if lma is known (yes) or calculated (no)
 # R: universal gas constant (J mol-1 K-1)
 # patm: atmospheric pressure (Pa)
 # ca: atmospheric CO2 at z (Pa)
@@ -59,7 +64,8 @@ library(R.utils)
 sourceDirectory('functions', modifiedOnly = FALSE)
 
 calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao = 400, oao = 209460,
-                               paro = 800, q0 = 0.257, theta = 0.85, chi = NA, lma = NA, f = 0.5){
+                               paro = 800, theta = 0.85, chi = NA, q0 = 0.257, q0_resp = "yes", 
+                               q0_int = -0.0805, lma = NA, f = 0.5){
   
   # constants
   R <- 8.314
@@ -81,16 +87,22 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
     # C3
 
     # Coordination and least-cost hypothesis model terms
-    chi <- ifelse(is.na(chi), calc_chi(tg_c, z, vpdo, cao), chi)
+    given_chi <- given_chi(chi) # returns yes or no based on presence of chi value
+    # calculate chi if unknown
+    chi <- return_chi(given_chi = given_chi, chi = chi, temp = tg_c, z = z, vpdo = vpdo, cao = cao)
     ci <- chi * ca # Pa
     mc <- ((ci - gammastar) / (ci + km))
     m <- ((ci - gammastar)/(ci + (2 * gammastar)))
     omega <- calc_omega(theta = theta, c = c, m = m)
     omega_star <- (1 + (omega) - sqrt((1 + (omega))^2 - (4 * theta * omega)))
 
-    # calculate q0 using Bernacchi et al. (2003) temperature response (set to 0.257 at 25C)
-    # q0 = -0.0805 + (0.022 * tg_c) - (0.00034 * tg_c * tg_c)
-    q0 = 0.25 # Bernacchi only goes down to 10C and these are much colder >> probably shouldn't use!
+    # calculate q0
+    if(q0_resp == "yes"){
+      # Bernacchi et al. (2003) temperature response (set to 0.257 at 25C)
+      q0 = q0_int + (0.022 * tg_c) - (0.00034 * tg_c * tg_c)
+    }else{
+      q0
+    }
 
     # calculate vcmax and jmax
     vcmax <- ((q0 * par * m) / mc) * (omega_star / (8 * theta))
@@ -115,7 +127,9 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
       # C4
       
       # Coordination and least-cost hypothesis model terms
-      chi <- ifelse(is.na(chi), calc_chi_c4(cao, tg_c, vpd, z), chi)
+      given_chi <- given_chi(chi) # returns yes or no based on presence of chi value
+      # calculate chi if unknown
+      chi <- return_chi_c4(given_chi = given_chi, chi = chi, ca = cao, temp = tg_c, vpd = vpdo, z = z)
       ci <- ca * chi
       cm <- ci
       oi <- oa * chi
@@ -123,8 +137,13 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
       omega <- calc_omega(theta = theta, c = 0.01, m = m) # Eq. S4
       omega_star <- (1 + (omega) - sqrt((1 + (omega))^2 - (4 * theta * omega)))  # Eq. 18
       
-      # calculate q0 using Bernacchi et al. (2003) temperature response (set to 0.257 at 25C)
-      q0 <- -0.0805 + (0.022 * tg_c) - (0.00034 * tg_c * tg_c)
+      # calculate q0
+      if(q0_resp == "yes"){
+        # Bernacchi et al. (2003) temperature response (set to 0.257 at 25C)
+        q0 = q0_int + (0.022 * tg_c) - (0.00034 * tg_c * tg_c) 
+      }else{
+        q0
+      }
       Al <- q0 * par * m * omega_star / (8 * theta) # Eqn. 2.2
       jmax <- q0 * par * omega
 
@@ -157,11 +176,11 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
   vcmax25 <- vcmax / calc_tresp_mult(tg_c, tg_c, 25)
   jmax25 <- jmax / calc_jmax_tresp_mult(tg_c, tg_c, 25)
   
-  # estimate LMA
-  lma <- ifelse(is.na(lma), 
-                calc_lma(f = f, par = paro, temperature = tg_c, vpd_kpa = vpdo, z = z, co2 = 400), 
-                lma)
-
+  # LMA
+  given_lma <- ifelse(!is.na(lma), "yes", "no") # returns yes or no based on presence of LMA value
+  # calculate LMA if unknown
+  lma <- return_lma(given_lma, lma, f = f, par = paro, temperature = tg_c, vpd_kpa = vpdo, z = z, co2 = cao)
+  
   # calculate leaf N in rubisco from predicted vcmax
   nrubisco <- fvcmax25_nrubisco(vcmax25)
   
@@ -194,10 +213,13 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
 	                      "cao" = cao,
                         "oao" = oao,
 	                      "paro" = paro,
+                        "q0_response" = q0_resp,
+                        "q0_intercept" = q0_int,
 	                      "q0" = q0,
 	                      "theta" = theta,
                         "lma" = lma,
-                        # "f" = f,
+                        "given_lma" = given_lma,
+                        "f" = f,
                         "patm" = patm,
                         "par" = par,
                         "vpd" = vpd,
@@ -206,6 +228,7 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
                         "km" = km,
                         "gammastar" = gammastar,
                         "chi" = chi,
+                        "given_chi" = given_chi,
                         "ci" = ci,
                         "mc" = mc,
                         "m" = m,
