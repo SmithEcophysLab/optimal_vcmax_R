@@ -64,7 +64,7 @@ library(R.utils)
 sourceDirectory('functions', modifiedOnly = FALSE)
 
 calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao = 400, oao = 209460,
-                               paro = 800, theta = 0.85, chi = NA, q0 = 0.257, q0_resp = "yes", 
+                               paro = 800, beta = 146, theta = 0.85, chi = NA, q0 = 0.257, q0_resp = "yes", 
                                q0_int = -0.0805, lma = NA, f = 0.5){
   
   # constants
@@ -89,13 +89,13 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
     # Coordination and least-cost hypothesis model terms
     given_chi <- given_chi(chi) # returns yes or no based on presence of chi value
     # calculate chi if unknown
-    chi <- return_chi(given_chi = given_chi, chi = chi, temp = tg_c, z = z, vpdo = vpdo, cao = cao)
+    chi <- return_chi(given_chi = given_chi, chi = chi, temp = tg_c, z = z, vpdo = vpdo, cao = cao, beta = beta)
     ci <- chi * ca # Pa
     mc <- ((ci - gammastar) / (ci + km))
     m <- ((ci - gammastar)/(ci + (2 * gammastar)))
     omega <- calc_omega(theta = theta, c = c, m = m)
     omega_star <- (1 + (omega) - sqrt((1 + (omega))^2 - (4 * theta * omega)))
-
+    
     # calculate q0
     if(q0_resp == "yes"){
       # Bernacchi et al. (2003) temperature response (set to 0.257 at 25C)
@@ -216,6 +216,7 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
                         "q0_response" = q0_resp,
                         "q0_intercept" = q0_int,
 	                      "q0" = q0,
+                        "beta" = beta,
 	                      "theta" = theta,
                         "lma" = lma,
                         "given_lma" = given_lma,
