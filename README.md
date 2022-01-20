@@ -21,6 +21,22 @@ It is suggested that users run this script first to ensure the function will run
 
 All function descriptions, including parameter descriptions, can be found in the script files.
 
+## Model Inputs
+- pathway: photosynthetic pathway, either "C3" or "C4"
+- tg_c: acclimated temperature (degC)
+- z: elevation (m)
+- vpdo: vapor pressure deficit at sea level (kPa)
+- cao: atmospheric CO2 at sea level (umol mol-1)
+- oao: atmospheric O2 at sea level (ppm)
+- paro: photosynthetically active radiation at sea level (µmol m-2 s-1)
+- q0_resp: yes or no, use the q0 response curve calculation
+- q0_int: intercept for the q0 response curve calculation
+- q0: quantum efficiency of photosynthetic electron transport (mol/mol)
+- theta: curvature of the light response of electron transport (unitless)
+- chi: leaf intercellular to atmospheric CO2 ratio (ci/ca) (unitless),  defaults to "NA"
+- f: fraction of year in growing season
+- lma: leaf mass area (g m-2), defaults to "NA"
+
 ## Current DOI badge
 [![DOI](https://zenodo.org/badge/156727566.svg)](https://zenodo.org/badge/latestdoi/156727566)
 
