@@ -1,7 +1,7 @@
 # calc_chi_c4
 
 
-calc_chi_c4 <- function(ca, temp, vpd, z){
+calc_chi_c4 <- function(ca, temp, vpd, z, beta){
   patm <- calc_patm(z)
   ca_pa <- ca * 1e-6 * patm
   
@@ -18,14 +18,12 @@ calc_chi_c4 <- function(ca, temp, vpd, z){
   
   xi <- sqrt((beta * Kp) / (1.6 * eta_star))
   chi <- (xi / (xi + sqrt(vpd_pa)))
-  # res <- c(chi, ci)
-  res <- chi
-  
-  return(res)
+
+  return(chi)
 }
 
-return_chi_c4<- function(given_chi, chi, ca, temp, vpd, z){
+return_chi_c4<- function(given_chi, chi, ca, temp, vpd, z, beta){
   ifelse(given_chi == "yes",
          return(chi),
-         return(calc_chi_c4(ca = ca, temp = temp, vpd = vpd, z = z)))
+         return(calc_chi_c4(ca = ca, temp = temp, vpd = vpd, z = z, beta = beta)))
 }

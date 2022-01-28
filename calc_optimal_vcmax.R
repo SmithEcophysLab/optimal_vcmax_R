@@ -81,11 +81,12 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
   
   # K and Gamma* model terms
   km <- calc_km_pa(tg_c, z)
-  gammastar <- calc_gammastar_pa(tg_c, z)
-  
+
   if(pathway == "C3"){
     # C3
 
+    gammastar <- calc_gammastar_pa(tg_c, z)
+    
     # Coordination and least-cost hypothesis model terms
     given_chi <- given_chi(chi) # returns yes or no based on presence of chi value
     # calculate chi if unknown
@@ -126,10 +127,12 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
     }else{
       # C4
       
+      gammastar <- calc_gammastar_pa_c4(tg_c, z)
+      
       # Coordination and least-cost hypothesis model terms
       given_chi <- given_chi(chi) # returns yes or no based on presence of chi value
       # calculate chi if unknown
-      chi <- return_chi_c4(given_chi = given_chi, chi = chi, ca = cao, temp = tg_c, vpd = vpdo, z = z)
+      chi <- return_chi_c4(given_chi = given_chi, chi = chi, ca = ca, temp = tg_c, vpd = vpdo, z = z, beta = beta)
       ci <- ca * chi
       cm <- ci
       oi <- oa * chi
