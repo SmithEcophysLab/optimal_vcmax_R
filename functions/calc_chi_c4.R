@@ -8,7 +8,7 @@ calc_chi_c4 <- function(ca, temp, vpd, z, beta){
   R <- 8.3145 # Pa
   tempK <- temp + 273.15
   vpd_pa <- vpd * 1000
-  beta <- 166
+  #beta <- 166
 
   Kp_25 <- 16 # Pa
   Ea_Kp <- 36300 # J mol^-1, for the Pa parameter ## Boyd et al 2015
