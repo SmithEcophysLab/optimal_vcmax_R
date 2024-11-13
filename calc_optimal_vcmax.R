@@ -208,6 +208,10 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
   # calculate the fraction of leaf N for photosynthesis out of all leaf N
   nphoto_frac <- nphoto / nall
   
+  #calculate stomatal conductance
+  gsc <- ((Ac / cao) / (1 - chi))
+  gsw <- gsc * 1.6
+  
 	# output
   results <- data.frame("pathway" = pathway,
 	                      "tg_c" = tg_c,
@@ -261,7 +265,9 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
 	                      "nall" = nall,
 	                      "nphoto" = nphoto, 
 	                      "nrubisco_frac" = nrubisco_frac, 
-	                      "nphoto_frac" = nphoto_frac)
+	                      "nphoto_frac" = nphoto_frac
+                        "gsw"=gsw
+                        "gsc"=gsc)
 
 	return(results)
 }
