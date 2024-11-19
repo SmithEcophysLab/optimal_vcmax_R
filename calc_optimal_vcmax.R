@@ -265,8 +265,8 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
 	                      "nall" = nall,
 	                      "nphoto" = nphoto, 
 	                      "nrubisco_frac" = nrubisco_frac, 
-	                      "nphoto_frac" = nphoto_frac
-                        "gsw"=gsw
+	                      "nphoto_frac" = nphoto_frac,
+                        "gsw"=gsw,
                         "gsc"=gsc)
 
 	return(results)
