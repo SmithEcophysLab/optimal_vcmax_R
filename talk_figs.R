@@ -148,3 +148,76 @@ dev.off()
 jpeg(filename = "talk_figs/ca_fig_c4_adv.jpeg", width = 5.5, height = 5.5, units = 'in', res = 600)
 plot(ca_fig_c4_adv)
 dev.off()
+
+## c3c4 state figures
+library(raster)
+library(RColorBrewer)
+library(maps)
+library(mapdata)
+library(gridBase)
+library(mapproj)
+library(grDevices)
+library(geodata)
+
+tmp_globe_4model = read.csv('/Users/nicksmith/Documents/Research/Colimitation/Spatial_Maps/cru_tmp_climExtract_growingseason_globe.csv')
+par_globe_4model = read.csv('/Users/nicksmith/Documents/Research/Colimitation/Spatial_Maps/cru_par_climExtract_growingseason_globe.csv')
+vpd_globe_4model = read.csv('/Users/nicksmith/Documents/Research/Colimitation/Spatial_Maps/cru_vpd_climExtract_growingseason_globe.csv')
+z_globe_4model =  read.csv('/Users/nicksmith/Documents/Research/Colimitation/Spatial_Maps/z_globe.csv')
+
+c3_globe_pres = calc_optimal_vcmax(tg_c = tmp_globe_4model$tmp, z = z_globe_4model$z, vpdo = vpd_globe_4model$vpd, 
+                       cao = 400, paro = par_globe_4model$par, pathway = "C3")
+c4_globe_pres = calc_optimal_vcmax(tg_c = tmp_globe_4model$tmp, z = z_globe_4model$z, vpdo = vpd_globe_4model$vpd, 
+                       cao = 400, paro = par_globe_4model$par, pathway = "C4")
+c3_globe_fut = calc_optimal_vcmax(tg_c = tmp_globe_4model$tmp + 4, z = z_globe_4model$z, vpdo = vpd_globe_4model$vpd, 
+                      cao = 1000, paro = par_globe_4model$par, pathway = "C3")
+c4_globe_fut = calc_optimal_vcmax(tg_c = tmp_globe_4model$tmp + 4, z = z_globe_4model$z, vpdo = vpd_globe_4model$vpd, 
+                      cao = 1000, paro = par_globe_4model$par, pathway = "C4")
+
+c3_globe_pres_A = cbind(tmp_globe_4model$lon, tmp_globe_4model$lat, c3_globe_pres$Ac)
+c4_globe_pres_A = cbind(tmp_globe_4model$lon, tmp_globe_4model$lat, c4_globe_pres$Ac)
+c3_globe_fut_A = cbind(tmp_globe_4model$lon, tmp_globe_4model$lat, c3_globe_fut$Ac)
+c4_globe_fut_A = cbind(tmp_globe_4model$lon, tmp_globe_4model$lat, c4_globe_fut$Ac)
+
+globe_pres_A_adv = cbind(tmp_globe_4model$lon, tmp_globe_4model$lat, ((c4_globe_pres$Ac - c3_globe_pres$Ac)/c3_globe_pres$Ac) * 100)
+globe_fut_A_adv = cbind(tmp_globe_4model$lon, tmp_globe_4model$lat, ((c4_globe_fut$Ac - c3_globe_fut$Ac)/c3_globe_fut$Ac) * 100)
+
+## plot
+us <- gadm(country="USA", level=1, path = '~/Documents/Data/geodata')
+neb_usa = c("Nebraska", "Kansas", "Oklahoma", "Texas")
+neb = us[match(toupper(neb_usa),toupper(us$NAME_1)),]
+
+globe_pres_A_adv_ras = rast(globe_pres_A_adv, type ='xyz')
+globe_pres_A_adv_ras[globe_pres_A_adv_ras > 30] <- 30
+globe_pres_A_adv_ras_crop <- crop(globe_pres_A_adv_ras, neb)
+mask_pres = mask(globe_pres_A_adv_ras_crop, neb)
+
+globe_fut_A_adv_ras = rast(globe_fut_A_adv, type ='xyz')
+globe_fut_A_adv_ras[globe_fut_A_adv_ras > 30] <- 30
+globe_fut_A_adv_ras_crop <- crop(globe_fut_A_adv_ras, neb)
+mask_fut = mask(globe_fut_A_adv_ras_crop, neb)
+
+mean(as.matrix(mask_pres), na.rm = T)
+mean(as.matrix(mask_fut), na.rm = T)
+
+pale = colorRampPalette(c(brewer.pal(9,'Reds')))
+cols = pale(21)
+#arg = list(at = seq(0, 30, 2), labels = seq(0, 30, 2))
+
+par(mfrow = c(2, 1), mar = c(1, 1, 1, 1), oma = c(1, 1, 1, 3))
+plot(neb, axes = F)
+plot(mask_pres, add = T, col = cols, 
+     legend=T,
+     type = 'continuous', range = c(0, 30),
+     axes = F, smooth = T)
+plot(neb, add = T, axes = F)
+title('Present day')
+
+plot(neb, axes = F)
+plot(mask_fut,add = T, col = cols, 
+     legend=T,
+     type = 'continuous', range = c(0, 30),
+     axes = F, smooth = T)
+plot(neb, add = T)
+title('Future')
+
+
