@@ -124,6 +124,12 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
     Ap <- 0
     Ac <- vcmax * mc
     
+    # calc rd
+    rd <- vcmax * 0.018 # Ren et al. (2024)
+    
+    # calc anet
+    Anet <- Ac - rd
+    
     }else{
       # C4
       
@@ -170,14 +176,24 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
       vcmax <- (q0 * par * m * omega_star / (8 * theta)) * ((cbs + kr * (1 + obs/ko)) / (cbs - gammastar)) # Eqn. 2.47
       mc <- ((cbs + kr * (1 + obs/ko)) / (cbs - gammastar))
       Ac <- vcmax * ((cbs - gammastar) / (kr * (1 + obs/ko) + cbs)) # Eqn. 2.4
+      
+      # calc rd
+      rd <- vcmax * 0.018 # Ren et al. (2024)
+      
+      # calc anet
+      Anet <- Ac - rd
 
-      # calculate vpmax at temperature = 25 C
-      vpmax25 <- vpmax / calc_tresp_mult(tg_c, tg_c, 25) # using vcmax parameters - find better solution
     }
   
   # calculate vcmax and jmax at temperature = 25 C
   vcmax25 <- vcmax / calc_tresp_mult(tg_c, tg_c, 25)
   jmax25 <- jmax / calc_jmax_tresp_mult(tg_c, tg_c, 25)
+  
+  # calculate vpmax at temperature = 25 C
+  vpmax25 <- vpmax / calc_tresp_mult(tg_c, tg_c, 25) # using vcmax parameters - find better solution
+  
+  # calculate rd at temperature = 25 C
+  rd25 <- rd /calc_rd_tresp_mult(tg_c, tg_c, 25)
   
   # LMA
   given_lma <- ifelse(!is.na(lma), "yes", "no") # returns yes or no based on presence of LMA value
@@ -252,12 +268,15 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
                         "chi_bs" = chi_bs,
                         "obs" = obs,
                         "Ac" = Ac,
+                        "rd" = rd,
+                        "Anet" = Anet,
                         "jmax" = jmax,
                         "vpmax" = vpmax,
 	                      "vcmax" = vcmax,
                         "jmax25" = jmax25,
                         "vpmax25" = vpmax25,
                         "vcmax25" = vcmax25,
+                        "rd25" = rd25,
 	                      "nrubisco" = nrubisco, 
 	                      "nbioe" = nbioe, 
 	                      "npep" = npep, 

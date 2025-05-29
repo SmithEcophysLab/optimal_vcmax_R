@@ -33,3 +33,10 @@ calc_jmax_tresp_mult = function(tleaf, tmean, tref){
   kbeg * kend
   
 }
+
+### function to scale rd to different temperatures
+calc_rd_tresp_mult = function(tleaf, tmean, tref){
+  
+  exp((0.1012 * (tmean - tref)) - (0.0005 * ((tmean^2) - (tref^2))))
+  
+}
