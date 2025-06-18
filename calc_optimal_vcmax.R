@@ -63,7 +63,7 @@ library(R.utils)
 # load necessary functions
 sourceDirectory('functions', modifiedOnly = FALSE)
 
-calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao = 400, oao = 209460,
+calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z = 0, vpdo = 1, cao = 400, oao = 209460,
                                paro = 800, beta = 146, theta = 0.85, chi = NA, q0 = 0.257, q0_resp = "yes", 
                                q0_int = -0.0805, lma = NA, f = 0.5){
   
@@ -198,7 +198,12 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
   # LMA
   given_lma <- ifelse(!is.na(lma), "yes", "no") # returns yes or no based on presence of LMA value
   # calculate LMA if unknown
-  lma <- return_lma(given_lma, lma, f = f, par = paro, temperature = tg_c, vpd_kpa = vpdo, z = z, co2 = cao)
+  #lma <- return_lma(given_lma, lma, deciduous = deciduous, f = f, par = paro, temperature = tg_c, vpd_kpa = vpdo, z = z, co2 = cao)
+  if(given_lma == "yes"){
+    lma <- lma
+  }else{
+    lma <- calc_lma(deciduous = deciduous, f = f, par = par, temperature = tg_c, vpd_kpa = vpd, z = z, co2 = cao)
+  }
   
   # calculate leaf N in rubisco from predicted vcmax
   nrubisco <- fvcmax25_nrubisco(vcmax25)
@@ -230,6 +235,7 @@ calc_optimal_vcmax <- function(pathway = "C3", tg_c = 25, z = 0, vpdo = 1, cao =
   
 	# output
   results <- data.frame("pathway" = pathway,
+                        "deciduous" = deciduous,
 	                      "tg_c" = tg_c,
 	                      "z" = z,
 	                      "vpdo" = vpdo,

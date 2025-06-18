@@ -160,10 +160,10 @@ calc_lma <- function(deciduous = 'yes', # yes or no for deciduous species
   
 }
 
-return_lma <- function(given_lma, lma, f, par, temperature, vpd_kpa, z, co2){
+return_lma <- function(given_lma, lma, deciduous, f, par, temperature, vpd_kpa, z, co2){
   ifelse(given_lma == "yes",
          return(lma),
-         return(calc_lma(f = f, par = par, temperature = temperature, vpd_kpa = vpd_kpa, z = z, co2 = co2)))
+         return(calc_lma(deciduous = deciduous, f = f, par = par, temperature = temperature, vpd_kpa = vpd_kpa, z = z, co2 = co2)))
 }
 
 # given_lma <- function(lma){
