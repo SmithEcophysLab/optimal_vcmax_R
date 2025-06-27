@@ -229,9 +229,13 @@ calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z =
   # calculate the fraction of leaf N for photosynthesis out of all leaf N
   nphoto_frac <- nphoto / nall
   
-  #calculate stomatal conductance
+  # calculate stomatal conductance
   gsc <- ((Ac / cao) / (1 - chi))
   gsw <- gsc * 1.6
+  
+  # calculate leaf n metrics
+  narea <- nall
+  nmass <- narea * lma
   
 	# output
   results <- data.frame("pathway" = pathway,
@@ -292,7 +296,9 @@ calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z =
 	                      "nrubisco_frac" = nrubisco_frac, 
 	                      "nphoto_frac" = nphoto_frac,
                         "gsw"=gsw,
-                        "gsc"=gsc)
+                        "gsc"=gsc,
+                        "narea"=narea,
+                        "nmass"=nmass)
 
 	return(results)
 }
