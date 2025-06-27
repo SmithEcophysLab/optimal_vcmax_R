@@ -235,7 +235,7 @@ calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z =
   
   # calculate leaf n metrics
   narea <- nall
-  nmass <- narea * lma
+  nmass <- narea * (1/lma)
   
 	# output
   results <- data.frame("pathway" = pathway,
