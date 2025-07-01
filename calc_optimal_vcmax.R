@@ -202,7 +202,8 @@ calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z =
   if(given_lma == "yes"){
     lma <- lma
   }else{
-    lma <- calc_lma(deciduous = deciduous, f = f, par = par, temperature = tg_c, vpd_kpa = vpd, z = z, co2 = cao)
+    lma <- calc_lma(deciduous = deciduous, f = f, par = par, temperature = tg_c, 
+                    beta = beta, R = R, m = m, mc = mc)
   }
   
   # calculate leaf N in rubisco from predicted vcmax
