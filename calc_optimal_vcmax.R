@@ -238,6 +238,10 @@ calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z =
   narea <- nall
   nmass <- narea * (1/lma)
   
+  # calculate efficiency metrics
+  wue <- Anet/gsw
+  nue <- Anet/nall
+  
 	# output
   results <- data.frame("pathway" = pathway,
                         "deciduous" = deciduous,
@@ -299,7 +303,9 @@ calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z =
                         "gsw"=gsw,
                         "gsc"=gsc,
                         "narea"=narea,
-                        "nmass"=nmass)
+                        "nmass"=nmass,
+                        "wue"=wue,
+                        "nue"=nue)
 
 	return(results)
 }
