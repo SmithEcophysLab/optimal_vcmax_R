@@ -52,6 +52,10 @@
 # nphoto: leaf N used for photosynthesis
 # nrubisco_frac: fraction of leaf N in rubisco out of all leaf N
 # nphoto_frac: fraction of leaf N for photosynthesis out of all leaf N
+# parea: area-based leaf photosynthetic phosphorus (g m-2)
+# nue = nitrogen use efficiency
+# wue = water use efficiency
+# pue = phosphorus use efficiency
 
 
 # All equation numbers refer to equations presented in Smith et al., 2019 
@@ -238,9 +242,14 @@ calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z =
   narea <- nall
   nmass <- narea * (1/lma)
   
+  # calculate leaf P (g m-2)
+  parea <- Al * (1/1e6) * (1/11.48) * 5 * 92.91  
+  
   # calculate efficiency metrics
   wue <- Anet/gsw
   nue <- Anet/nall
+  pue <- Anet/parea
+
   
 	# output
   results <- data.frame("pathway" = pathway,
@@ -304,8 +313,10 @@ calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z =
                         "gsc"=gsc,
                         "narea"=narea,
                         "nmass"=nmass,
+                        "parea"=parea,
                         "wue"=wue,
-                        "nue"=nue)
+                        "nue"=nue,
+                        "pue"=pue)
 
 	return(results)
 }
