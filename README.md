@@ -38,7 +38,7 @@ All function descriptions, including parameter descriptions, can be found in the
 - lma: leaf mass area (g m-2), defaults to "NA"
 
 ## Current DOI badge
-[![DOI](https://zenodo.org/badge/156727566.svg)](https://zenodo.org/badge/latestdoi/156727566)
+[![DOI](https://zenodo.org/badge/156727566.svg)](https://doi.org/10.5281/zenodo.1481880)
 
 ## Contact
 Any questions or issues can be submitted via GitHub or directed to Nick Smith
