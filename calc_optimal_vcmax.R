@@ -94,7 +94,7 @@ calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z =
     # Coordination and least-cost hypothesis model terms
     given_chi <- given_chi(chi) # returns yes or no based on presence of chi value
     # calculate chi if unknown
-    chi <- return_chi(given_chi = given_chi, chi = chi, temp = tg_c, z = z, vpdo = vpdo, cao = cao, beta = beta)
+    chi <- return_chi(given_chi = given_chi, chi = chi, temp = tg_c, z = z, vpdo = vpd, cao = ca, beta = beta)
     ci <- chi * ca # Pa
     mc <- ((ci - gammastar) / (ci + km))
     m <- ((ci - gammastar)/(ci + (2 * gammastar)))
@@ -142,7 +142,7 @@ calc_optimal_vcmax <- function(pathway = "C3", deciduous = "yes", tg_c = 25, z =
       # Coordination and least-cost hypothesis model terms
       given_chi <- given_chi(chi) # returns yes or no based on presence of chi value
       # calculate chi if unknown
-      chi <- return_chi_c4(given_chi = given_chi, chi = chi, ca = ca, temp = tg_c, vpd = vpdo, z = z, beta = beta)
+      chi <- return_chi_c4(given_chi = given_chi, chi = chi, ca = ca, temp = tg_c, vpd = vpd, z = z, beta = beta)
       ci <- ca * chi
       cm <- ci
       oi <- oa * chi
